@@ -11,7 +11,7 @@ import javax.transaction.Transactional
 interface FileRepository: JpaRepository<FileEntity, String> {
 
     fun existsByUsername(username: String): Boolean
-    fun getUserFileByFileIdAndUsername(fileId: String, username: String): FileEntity
+    fun getUserFileByFileId(fileId: String): FileEntity?
     fun getAllByUsername(username: String): List<FileEntity>
     fun deleteByFileId(fileId: String)
 
