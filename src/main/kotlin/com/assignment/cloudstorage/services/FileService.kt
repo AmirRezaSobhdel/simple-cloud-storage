@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.nio.file.Paths
-import javax.transaction.Transactional
 
 @Service
 @Slf4j
@@ -20,6 +19,8 @@ class FileService {
     fun uploadFile(multipartFile: MultipartFile, username: String): FileEntity? {
         var dbFileEntity: FileEntity? = null
         try {
+            val dir = File("src/main/resources/files/")
+            if (!dir.exists()) dir.mkdirs()
             val file = File("src/main/resources/files/" + username + "-" + multipartFile.originalFilename)
             file.createNewFile()
             multipartFile.transferTo(Paths.get(file.absolutePath))
