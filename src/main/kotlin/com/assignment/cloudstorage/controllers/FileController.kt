@@ -99,13 +99,13 @@ class FileController {
             val fileEntity = fileService.provideFile(fileId)
             return try {
                 val responseStream: StreamingResponseBody
-                val filePathString = fileEntity!!.getFilePath()
+                val filePathString = fileEntity!!.filePath
                 val filePath = Paths.get(filePathString)
                 val fileSize = Files.size(filePath)
                 val buffer = ByteArray(1024)
                 val responseHeaders = HttpHeaders()
                 if (rangeHeader == null) {
-                    responseHeaders.add("Content-Type", fileEntity.getContentType())
+                    responseHeaders.add("Content-Type", fileEntity.contentType)
                     responseHeaders.add("Content-Length", fileSize.toString())
                     responseStream = StreamingResponseBody { os: OutputStream ->
                         val file = RandomAccessFile(filePathString, "r")
@@ -137,7 +137,7 @@ class FileController {
                     rangeEnd = fileSize - 1
                 }
                 val contentLength = (rangeEnd - rangeStart + 1).toString()
-                responseHeaders.add("Content-Type", fileEntity.getContentType())
+                responseHeaders.add("Content-Type", fileEntity.contentType)
                 responseHeaders.add("Content-Length", contentLength)
                 responseHeaders.add("Accept-Ranges", "bytes")
                 responseHeaders.add("Content-Range", "bytes $rangeStart-$rangeEnd/$fileSize")
